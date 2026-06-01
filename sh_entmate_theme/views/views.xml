@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_simple_inherit_modif" model="ir.ui.view">
+        <field name="name">res.users.preferences.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page string="Enterprisemate Theme Configuration" name="entmate_theme_configuration">
+                    <group>
+                        <group>
+                            <field name="sh_enable_night_mode"/>
+                            <field name="sh_enable_language_selection" readonly="0"/>
+                            <field name="sh_enable_gloabl_search_mode"/>
+                            <field name="sh_enable_todo_mode" readonly="0"/>
+                            <field name="show_attachment_in_list_view" readonly="0"/>
+                            <field name="sh_enable_open_record_in_new_tab" readonly="0"/>
+                            <field name="sh_enable_zoom"  readonly="0"/>
+                            <div role="alert" class="alert alert-danger" invisible="sh_enable_zoom == False">
+                                <strong> Sticky view </strong> feature can not work smoothly when zoom in/out views.
+                            </div>
+                        </group>
+                        <group>
+                            <field name="sh_enable_calculator_mode"/>
+                            <field name="sh_enable_quick_menu_mode" readonly="0"/>
+                            <field name="sh_enable_multi_tab" readonly="0"/>
+                            <field name="sh_disable_auto_edit_model" readonly="0"/>
+                            <field name="sh_enable_expand_collapse" readonly="0"/>
+                            <field name="sh_enable_recent_record_view" readonly="0"/>
+                            <field name="quick_create_view" readonly="0"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,81 @@
+/* =====================================================
+   GLOBAL RTL
+   ===================================================== */
+html.o_rtl, body.o_rtl {
+    direction: rtl !important;
+    text-align: right;
+}
+
+/* =====================================================
+   WEB CLIENT
+   ===================================================== */
+.o_rtl .o_web_client,
+.o_rtl .o_action_manager,
+.o_rtl .o_content {
+    direction: rtl;
+}
+
+/* =====================================================
+   SIDEBAR / NAVBAR (THEME SAFE)
+   ===================================================== */
+.o_rtl .o_main_navbar,
+.o_rtl .o_navbar {
+    flex-direction: row-reverse;
+}
+
+/* =====================================================
+   FORM VIEW CORE FIX
+   ===================================================== */
+
+/* Main form container */
+.o_rtl .o_form_view {
+    direction: rtl;
+}
+
+/* Groups (label + field rows) */
+.o_rtl .o_form_view .o_group {
+    direction: rtl;
+}
+
+/* Label column */
+.o_rtl .o_form_label,
+.o_rtl .o_form_view label {
+    text-align: right;
+}
+
+/* Field column */
+.o_rtl .o_form_view .o_field_widget {
+    text-align: right;
+}
+
+/* Reverse label/field flex order */
+.o_rtl .o_form_view .o_group .row {
+    flex-direction: row-reverse;
+}
+
+/* =====================================================
+   AVATAR / RIGHT SIDE CARD
+   ===================================================== */
+.o_rtl .o_form_view .oe_avatar {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* =====================================================
+   LIST / KANBAN
+   ===================================================== */
+.o_rtl .o_list_view,
+.o_rtl .o_kanban_view {
+    direction: rtl;
+}
+
+/* =====================================================
+   FORCE OVERRIDE THEMES THAT HARD-CODE LTR
+   ===================================================== */
+.o_rtl [style*="direction: ltr"] {
+    direction: rtl !important;
+}
+
+.o_rtl [class*="text-left"] {
+    text-align: right !important;
+}

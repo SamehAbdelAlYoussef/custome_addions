@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sh_entmate_theme.LanguageTemplate" owl="1">
+        <div class="sh_language_selector dropdown">
+            <button class="btn dropdown-toggle" type="button" id="sh_lang_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img class="sh_lang_flag" t-att-src="current_lang[2]"/>
+                <span class="sh_lang_name">
+                    <t t-esc="current_lang[1]"/>
+                </span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="sh_lang_dropdown">
+                <t t-foreach="languages_list" t-as="language" t-key="lang_index">
+                    <li>
+                        <a class="dropdown-item" t-on-click="() => this._onChangeLanguage(language[0])">
+                            <img class="sh_lang_flag" t-att-src="language[2]"/>
+                            <span>
+                                <t t-esc="language[1]"/>
+                            </span>
+                        </a>
+                    </li>
+                </t>
+            </ul>
+        </div>
+    </t>
+</templates>

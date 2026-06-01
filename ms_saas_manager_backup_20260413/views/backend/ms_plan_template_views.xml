@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Plan Template Form ───────────────────────── -->
+    <record id="view_ms_plan_template_form" model="ir.ui.view">
+        <field name="name">ms.plan.template.form</field>
+        <field name="model">ms.plan.template</field>
+        <field name="arch" type="xml">
+            <form string="Plan Template">
+                <header>
+                    <button name="action_copy_modules_from" type="object"
+                            string="Copy Modules From..." class="btn-secondary"
+                            icon="fa-copy"/>
+                    <button name="action_upload_module" type="object"
+                            string="Upload Module" class="btn-secondary"
+                            icon="fa-upload"
+                            invisible="not upload_module_file"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_subscriptions" type="object"
+                                class="oe_stat_button" icon="fa-users">
+                            <field name="subscription_count" widget="statinfo" string="Subscribers"/>
+                        </button>
+                        <button name="action_view_subscriptions" type="object"
+                                class="oe_stat_button" icon="fa-puzzle-piece">
+                            <field name="module_count" widget="statinfo" string="Modules"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Plan Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identity">
+                            <field name="name_ar"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="is_featured"/>
+                            <field name="badge"/>
+                        </group>
+                        <group string="Pricing (EGP)">
+                            <field name="monthly_price"/>
+                            <field name="yearly_price"/>
+                            <field name="yearly_saving_pct" string="Yearly Saving %"/>
+                            <field name="extra_users_price"/>
+                        </group>
+                        <group string="Limits">
+                            <field name="max_users"/>
+                            <field name="trial_days"/>
+                        </group>
+                        <group string="Revenue">
+                            <field name="revenue_month" widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Modules to Install" name="modules">
+                            <div class="alert alert-info" role="alert">
+                                Select modules from the dropdown to auto-fill details. Required modules cannot be deleted.
+                            </div>
+                            <field name="module_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="module_id" string="Select Module"
+                                           options="{'no_create': True}"/>
+                                    <field name="name" placeholder="e.g. account"/>
+                                    <field name="label" placeholder="e.g. Accounting"/>
+                                    <field name="description" optional="hide"/>
+                                    <field name="category"/>
+                                    <field name="is_required"/>
+                                    <field name="module_state" optional="show"
+                                           widget="badge"
+                                           decoration-success="module_state == 'installed'"
+                                           decoration-info="module_state == 'uninstalled'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Features (Website Display)" name="features">
+                            <div class="alert alert-info" role="alert">
+                                One feature per line. Shown as bullet points on the pricing page.
+                            </div>
+                            <field name="features" widget="text" placeholder="Feature 1&#10;Feature 2&#10;Feature 3"/>
+                        </page>
+                        <page string="Description" name="desc">
+                            <field name="description" widget="text"
+                                   placeholder="Short description shown under plan name on pricing page"/>
+                        </page>
+                        <page string="Upload Custom Module" name="upload">
+                            <div class="alert alert-warning" role="alert">
+                                Upload a custom Odoo module as a .zip file. It will be extracted to the server's addons directory and added to this plan's module list.
+                                After uploading, restart Odoo and update the module list from Apps.
+                            </div>
+                            <group>
+                                <field name="upload_module_file" filename="upload_module_name"/>
+                                <field name="upload_module_name" invisible="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Plan Template List ───────────────────────── -->
+    <record id="view_ms_plan_template_list" model="ir.ui.view">
+        <field name="name">ms.plan.template.list</field>
+        <field name="model">ms.plan.template</field>
+        <field name="arch" type="xml">
+            <list string="Plan Templates" decoration-success="is_featured == True">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="monthly_price"/>
+                <field name="yearly_price"/>
+                <field name="yearly_saving_pct" widget="percentage"/>
+                <field name="max_users"/>
+                <field name="trial_days"/>
+                <field name="module_count"/>
+                <field name="subscription_count"/>
+                <field name="revenue_month"/>
+                <field name="active"/>
+                <field name="is_featured"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Action ───────────────────────────────────── -->
+    <record id="action_ms_plan_template" model="ir.actions.act_window">
+        <field name="name">Plan Templates</field>
+        <field name="res_model">ms.plan.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first plan template!
+            </p>
+            <p>Define what modules get installed for each pricing plan.</p>
+        </field>
+    </record>
+
+</odoo>

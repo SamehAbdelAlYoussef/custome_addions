@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="report_cash_flow" model="dynamic.account.report">
+            <field name="name">Cash Flow Statement</field>
+            <field name="report_type">cash_flow</field>
+            <field name="sequence">80</field>
+            <field name="use_date_to_only">False</field>
+            <field name="date_range">this_year</field>
+            <field name="filter_date_range">True</field>
+            <field name="filter_comparison">True</field>
+            <field name="filter_journals">False</field>
+            <field name="filter_accounts">False</field>
+            <field name="filter_partners">False</field>
+            <field name="filter_unfold_all">False</field>
+        </record>
+    </data>
+</odoo>
+

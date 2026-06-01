@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="0">
+    <!--
+        Activate Full Accounting Features for Community Edition
+        ========================================================
+        In Odoo CE, the Accounting app shows as "Invoicing" with limited
+        Reporting menu (only Invoice Analysis). These records enable the
+        full accounting features for all internal users.
+    -->
+
+    <!-- Show Full Accounting Features — enables full Accounting menus -->
+    <record id="account.group_account_readonly" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>
+

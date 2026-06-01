@@ -1,0 +1,5 @@
+/* OdooSpot minimal */
+
+/* Signup loading spinner */
+@keyframes ms-spin { to { transform: rotate(360deg); } }
+#ms-spinner { animation: ms-spin 1s linear infinite; }

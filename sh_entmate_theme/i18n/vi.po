@@ -1,0 +1,19 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_entmate_theme
+#
+
+#. module: sh_entmate_theme
+#: model:ir.module.module,shortdesc:base.module_sh_entmate_theme
+msgid "EnterpriseMate Backend Theme [For Community Edition]"
+msgstr "Chủ đề Backend EnterpriseMate [Dành cho phiên bản cộng đồng]"
+
+#. module: sh_entmate_theme
+#: model:ir.module.module,summary:base.module_sh_entmate_theme
+msgid "Enterprise Backend Theme, Enterprise Theme, Backend Enterprise Theme, Flexible Enterprise Theme, Enter prise Theme Odoo"
+msgstr "Chủ đề Backend doanh nghiệp, Chủ đề doanh nghiệp, Chủ đề Backend doanh nghiệp, Chủ đề doanh nghiệp linh hoạt, Nhập chủ đề prise Odoo"
+
+#. module: sh_entmate_theme
+#: model:ir.module.module,description:base.module_sh_entmate_theme
+msgid "Do you want odoo enterpise look in your community version? Are You looking for modern, creative, clean, clear, materialise odoo enterpise look theme for your backend? So you are at the right place, We have made sure that this theme is highly clean, modern, fully customizable enterprise look theme. Cheers!"
+msgstr "Bạn có muốn giao diện odoo enterpise trong phiên bản cộng đồng của mình không? Bạn đang tìm kiếm giao diện odoo enterpise hiện đại, sáng tạo, sạch sẽ, rõ ràng, cụ thể cho phần phụ trợ của mình? Vậy là bạn đã đến đúng nơi rồi, Chúng tôi đã đảm bảo rằng giao diện này rất sạch sẽ, hiện đại, giao diện doanh nghiệp có thể tùy chỉnh hoàn toàn. Chúc vui vẻ!"

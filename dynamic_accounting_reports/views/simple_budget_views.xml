@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Budget List View -->
+    <record id="view_simple_budget_list" model="ir.ui.view">
+        <field name="name">simple.budget.list</field>
+        <field name="model">simple.budget</field>
+        <field name="arch" type="xml">
+            <list string="Budgets" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="total_planned" sum="Total Planned"/>
+                <field name="total_actual" sum="Total Actual"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-warning="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Budget Form View -->
+    <record id="view_simple_budget_form" model="ir.ui.view">
+        <field name="name">simple.budget.form</field>
+        <field name="model">simple.budget</field>
+        <field name="arch" type="xml">
+            <form string="Budget">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" string="Done" type="object"
+                            class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('cancelled', 'done')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('cancelled', 'done')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Budget Name..."/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="total_planned"/>
+                            <field name="total_actual"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Budget Lines" name="budget_lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="analytic_plan_id" readonly="1" optional="show"/>
+                                    <field name="analytic_account_id"/>
+                                    <field name="planned_amount" sum="Total Planned"/>
+                                    <field name="actual_amount" sum="Total Actual"/>
+                                    <field name="variance" sum="Total Variance"
+                                           decoration-danger="variance &lt; 0"
+                                           decoration-success="variance &gt;= 0"/>
+                                    <field name="variance_pct"
+                                           decoration-danger="variance_pct &lt; 0"
+                                           decoration-success="variance_pct &gt;= 0"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Add notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_simple_budget" model="ir.actions.act_window">
+        <field name="name">Budgets</field>
+        <field name="res_model">simple.budget</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first budget
+            </p>
+            <p>
+                Set planned amounts per analytic account and track actual vs budget.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_simple_budget"
+              name="Budgets"
+              parent="menu_dynamic_reports_root"
+              action="action_simple_budget"
+              sequence="5"/>
+</odoo>

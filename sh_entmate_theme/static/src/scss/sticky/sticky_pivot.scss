@@ -1,0 +1,25 @@
+// Sticky Header & Footer in List View
+@if $is_sticky_pivot == "True"{
+    .o_pivot_view{
+        .o_pivot{
+                table{
+                    thead{position: sticky;top: 0;background: #ffffff;z-index: 30;
+                        tr {
+                            &:first-child {
+                                th {
+                                    &:first-child { position: sticky; top: 0; background: #ffffff; z-index: 110;}
+                                }
+                            }
+                        }
+                    }
+                    tbody{
+                        tr{
+                            th{
+                                &:first-child {position: sticky;left: 0;background: #ffffff;z-index: 10;}
+                            }
+                        }
+                    }
+            }
+        }
+    }
+}

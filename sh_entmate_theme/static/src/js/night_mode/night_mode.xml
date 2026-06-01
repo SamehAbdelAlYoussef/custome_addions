@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+	<t t-name="sh_entmate_theme.NightMode">
+		<t t-if="state.show_theme_mode">
+			<div class="o_night_mode">
+				<t t-if="!state.is_night_mode">
+					<span class="fa fa-moon-o" id="moon_button" t-on-click="_click_moon_button" style="font-size: 16px;vertical-align: 0;display:inline-flex;"></span>
+				</t>
+				<t t-else="">
+					<span class="fa fa-sun-o" id="sun_button" t-on-click="_click_sun_button" style="display:inline-flex;font-size: 16px;vertical-align: 0;"></span>
+				</t>
+			</div>
+		</t>
+	</t>
+</templates>

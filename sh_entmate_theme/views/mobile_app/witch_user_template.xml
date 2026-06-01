@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sh_backmate_theme_mobile_switch_user_template" name="Switch User Template">
+        <!-- <t t-call="web.frontend_layout">
+            <t t-set="html_data" t-value="{'style': 'height: 100%;'}" />
+            <t t-set="body_classname" t-value="'bg-100'" />
+            <t t-set="no_header" t-value="True" />
+            <t t-set="no_footer" t-value="True" /> -->
+
+            <div class="container py-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-12">
+                        <p class="text-center">
+                            You are switching with another user.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <!-- </t> -->
+    </template>
+</odoo>

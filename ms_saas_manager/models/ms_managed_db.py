@@ -1,0 +1,293 @@
+# -*- coding: utf-8 -*-
+import xmlrpc.client
+import logging
+import subprocess
+import os
+
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
+
+DOMAIN = 'msolutions-eg.com'
+
+
+class MsManagedDb(models.Model):
+    """
+    Represents a customer Odoo database provisioned by the SaaS manager.
+    Each record = one customer database on the same server.
+    """
+    _name = 'ms.managed.db'
+    _description = 'Managed Customer Database'
+    _inherit = ['mail.thread']
+    _order = 'create_date desc'
+
+    name         = fields.Char(string='Database Name', required=True, readonly=True)
+    subdomain    = fields.Char(string='Subdomain', required=True, readonly=True)
+    url          = fields.Char(string='URL', compute='_compute_url')
+    subscription_id = fields.Many2one('ms.subscription', string='Subscription', readonly=True)
+    template_id  = fields.Many2one('ms.plan.template', string='Plan Template', readonly=True)
+
+    state = fields.Selection([
+        ('provisioning', 'Provisioning...'),
+        ('ready',        'Ready'),
+        ('error',        'Error'),
+        ('suspended',    'Suspended'),
+        ('deleted',      'Deleted'),
+    ], default='provisioning', tracking=True)
+
+    admin_email    = fields.Char(string='Admin Email')
+    admin_password = fields.Char(string='Admin Password')
+    login_token    = fields.Char(string='Login Token', copy=False)  # stored hashed in real prod
+    error_message  = fields.Text(string='Error Details')
+
+    modules_installed = fields.Text(string='Modules Installed')
+    db_size_mb        = fields.Float(string='DB Size (MB)', readonly=True)
+
+    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
+
+    def _compute_url(self):
+        for db in self:
+            db.url = f'https://{db.subdomain}.{DOMAIN}'
+
+    # ── Owner Access ─────────────────────────────────────────────────
+
+    def action_open_as_admin(self):
+        """Show credentials popup and open customer login page."""
+        self.ensure_one()
+        url = f'https://{self.subdomain}.{DOMAIN}/web/login'
+        # Return multi-action: notification + open URL
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/admin/autologin/{self.subdomain}',
+            'target': 'new',
+        }
+
+
+    def action_impersonate_admin(self):
+        """
+        Generate a one-time admin login token for this DB.
+        Uses Odoo XML-RPC to authenticate and return session URL.
+        """
+        self.ensure_one()
+        try:
+            url = f'http://127.0.0.1:8069'
+            common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')
+            uid = common.authenticate(
+                self.name,
+                self.admin_email or 'admin',
+                self.admin_password or '',
+                {}
+            )
+            if uid:
+                return {
+                    'type': 'ir.actions.act_url',
+                    'url': f'https://{self.subdomain}.{DOMAIN}/web',
+                    'target': 'new',
+                }
+        except Exception as e:
+            _logger.error('Impersonate error: %s', e)
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Open Customer DB'),
+                'message': f'Visit: https://{self.subdomain}.{DOMAIN}/web/login\n'
+                           f'Login: {self.admin_email}\nPassword: {self.admin_password}',
+                'type': 'info',
+                'sticky': True,
+            }
+        }
+
+    # ── Provision ─────────────────────────────────────────────────────
+
+    def provision(self, subscription, admin_email, admin_password, language='en_US'):
+        """
+        Main provisioning method.
+        Creates the Odoo database and installs modules from the plan template.
+        Called from ms.provision.wizard.
+        """
+        self.ensure_one()
+        try:
+            self.state = 'provisioning'
+            db_name = self.name
+            template = self.template_id
+
+            _logger.info('Provisioning database: %s', db_name)
+
+            # Get modules to install
+            modules = template.get_module_names()
+            if not modules:
+                modules = ['base', 'web', 'mail']
+            modules_str = ','.join(modules)
+
+            # Get Odoo config path
+            config_path = '/etc/odoo/odoo.conf'
+            odoo_bin = '/opt/odoo/venv/bin/python3 /opt/odoo/server/odoo-bin'
+
+            # Build the init command
+            cmd = (
+                f'/opt/odoo/venv/bin/python3 '
+                f'/opt/odoo/server/odoo-bin '
+                f'-c {config_path} '
+                f'-d {db_name} '
+                f'--init={modules_str} '
+                f'--without-demo=all '
+                f'--stop-after-init '
+                f'--no-http'
+            )
+
+            _logger.info('Running: %s', cmd)
+            result = subprocess.run(
+                cmd, shell=True, capture_output=True, text=True, timeout=900
+            )
+
+            init_failed = (result.returncode != 0)
+            if init_failed:
+                error = result.stderr[-2000:] if result.stderr else 'Unknown error'
+                _logger.error('Module init failed for %s (will still attempt credential setup): %s',
+                              db_name, error)
+                self.write({'error_message': error})
+                # Verify the DB at least exists before continuing
+                try:
+                    import psycopg2
+                    chk = psycopg2.connect(dbname=db_name, user='odoo',
+                                           host='localhost', password='MsDb@2025!')
+                    chk.close()
+                except Exception as e:
+                    _logger.error('DB %s does not exist or is unreachable: %s', db_name, e)
+                    self.write({'state': 'error',
+                                'error_message': 'DB unreachable after init: %s' % e})
+                    return False
+
+            # Set admin credentials directly via psycopg2 + passlib
+            # (replaces the previous inline-subprocess script which failed silently)
+            try:
+                import psycopg2
+                from passlib.context import CryptContext
+                ctx = CryptContext(schemes=['pbkdf2_sha512'])
+                pw_hash = ctx.hash(admin_password)
+
+                cred_conn = psycopg2.connect(
+                    dbname=db_name, user='odoo',
+                    host='localhost', password='MsDb@2025!'
+                )
+                cred_cur = cred_conn.cursor()
+                cred_cur.execute(
+                    "UPDATE res_users SET login = %s, password = %s WHERE id = 2",
+                    (admin_email, pw_hash)
+                )
+                cred_cur.execute(
+                    "UPDATE res_partner SET email = %s "
+                    "WHERE id = (SELECT partner_id FROM res_users WHERE id = 2)",
+                    (admin_email,)
+                )
+                # Enable Anglo-Saxon accounting by default for all new tenants
+                cred_cur.execute(
+                    "UPDATE res_company SET anglo_saxon_accounting = TRUE"
+                )
+                _logger.info('Enabled Anglo-Saxon accounting for %s', db_name)
+                cred_conn.commit()
+                cred_cur.close()
+                cred_conn.close()
+                _logger.info('Admin credentials set for %s (login=%s)', db_name, admin_email)
+            except Exception as e:
+                _logger.error('Failed to set admin credentials for %s: %s', db_name, e)
+                self.write({'state': 'error',
+                            'error_message': 'Credential setup failed: %s' % e})
+                return False
+
+            # Rename Invoicing menu → Accounting
+            try:
+                import psycopg2
+                ren_conn = psycopg2.connect(dbname=db_name, user='odoo', host='localhost', password='MsDb@2025!')
+                ren_cur = ren_conn.cursor()
+                ren_cur.execute("UPDATE ir_ui_menu SET name = jsonb_set(name, '{en_US}', '\"Accounting\"') WHERE name::text LIKE '%%Invoicing%%' AND parent_id IS NULL")
+                ren_cur.execute("UPDATE ir_module_module SET shortdesc = jsonb_set(shortdesc, '{en_US}', '\"Accounting\"') WHERE name = 'account'")
+                ren_cur.execute("DELETE FROM ir_ui_menu WHERE name::text LIKE '%%Apps%%' AND parent_id IS NULL")
+                ren_conn.commit()
+                ren_cur.close()
+                ren_conn.close()
+                _logger.info('Renamed Invoicing to Accounting in %s', db_name)
+            except Exception as e:
+                _logger.warning('Rename Invoicing failed for %s: %s', db_name, e)
+
+            self.write({
+                'state': 'error' if init_failed else 'ready',
+                'admin_email': admin_email,
+                'admin_password': admin_password,
+                'modules_installed': modules_str,
+            })
+
+            _logger.info('Database %s provisioned successfully', db_name)
+            return True
+
+        except subprocess.TimeoutExpired:
+            self.write({'state': 'error', 'error_message': 'Provisioning timed out after 5 minutes'})
+            return False
+        except Exception as e:
+            self.write({'state': 'error', 'error_message': str(e)})
+            _logger.error('Provisioning exception for %s: %s', self.name, e)
+            return False
+
+    def action_retry_provision(self):
+        """Retry failed provisioning."""
+        self.ensure_one()
+        sub = self.subscription_id
+        if sub:
+            wizard = self.env['ms.provision.wizard'].create({
+                'subscription_id': sub.id,
+                'template_id': sub.template_id.id,
+                'db_name': self.name,
+                'subdomain': self.subdomain,
+                'admin_email': self.admin_email or sub.email,
+            })
+            wizard.action_provision()
+
+    def action_suspend(self):
+        self.write({'state': 'suspended'})
+
+    def action_unsuspend(self):
+        self.write({'state': 'ready'})
+
+    def action_delete_database(self):
+        """Permanently delete the customer database from PostgreSQL."""
+        self.ensure_one()
+        db_name = self.name
+        try:
+            # Terminate active connections
+            subprocess.run(
+                f"psql -U odoo -d ms_app -c "
+                f"\"SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+                f"WHERE datname='{db_name}' AND pid <> pg_backend_pid();\"",
+                shell=True, timeout=30
+            )
+            # Drop database
+            result = subprocess.run(
+                f'psql -U odoo -d ms_app -c "DROP DATABASE IF EXISTS \"{db_name}\";"',
+                shell=True, capture_output=True, text=True, timeout=60
+            )
+            if result.returncode == 0:
+                self.write({'state': 'deleted'})
+                _logger.info('Database %s deleted successfully', db_name)
+            else:
+                _logger.error('Failed to delete %s: %s', db_name, result.stderr)
+                self.write({'error_message': result.stderr[:500]})
+        except Exception as e:
+            _logger.error('Delete exception for %s: %s', db_name, e)
+            self.write({'error_message': str(e)[:500]})
+
+    def action_refresh_size(self):
+        """Check database size in PostgreSQL."""
+        for db in self:
+            try:
+                result = subprocess.run(
+                    f'sudo -u postgres psql -t -c '
+                    f'"SELECT pg_size_pretty(pg_database_size(\'{db.name}\'));"',
+                    shell=True, capture_output=True, text=True, timeout=10
+                )
+                size_str = result.stdout.strip()
+                _logger.info('DB %s size: %s', db.name, size_str)
+            except Exception as e:
+                _logger.error('Size check error: %s', e)

@@ -1,0 +1,20 @@
+body {
+    &.sh_sidebar_background_enterprise {
+        .o_navbar {
+            .o_main_navbar {
+                .dropdown-menu-custom {
+                    .o-dropdown-item {
+                        .o_app { max-height: max-content;
+                            .o_menuitem {
+                                .sh_app_name { font-size: 0.875rem;text-shadow: none;}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.fa-bars{
+    color: black!important;
+}

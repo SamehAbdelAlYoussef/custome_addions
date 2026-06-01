@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="report_analytic_account" model="dynamic.account.report">
+        <field name="name">Analytic Account Report</field>
+        <field name="report_type">analytic_account</field>
+        <field name="sequence">75</field>
+        <field name="filter_date_range">True</field>
+        <field name="filter_comparison">True</field>
+        <field name="filter_journals">True</field>
+        <field name="filter_unfold_all">True</field>
+        <field name="filter_partners">True</field>
+    </record>
+
+    <record id="action_analytic_account_report" model="ir.actions.client">
+        <field name="name">Analytic Account Report</field>
+        <field name="tag">dynamic_account_report</field>
+        <field name="context" eval="{'report_id': ref('report_analytic_account')}"/>
+    </record>
+
+    <menuitem id="menu_analytic_account_report"
+              name="Analytic Account Report"
+              parent="menu_dynamic_reports_root"
+              action="action_analytic_account_report"
+              sequence="85"/>
+</odoo>

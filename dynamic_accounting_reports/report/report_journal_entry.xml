@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Report Action - Journal Entry -->
+    <record id="action_report_journal_entry" model="ir.actions.report">
+        <field name="name">Journal Entry</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dynamic_accounting_reports.report_journal_entry_template</field>
+        <field name="report_file">dynamic_accounting_reports.report_journal_entry_template</field>
+        <field name="print_report_name">'Journal Entry - %s' % (object.name or 'Draft')</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Report Template -->
+    <template id="report_journal_entry_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial, sans-serif;">
+
+                        <!-- Title -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h2 style="color: #5c4848; margin-bottom: 5px;">
+                                <span t-if="doc.move_type == 'entry'">Journal Entry / قيد يومية</span>
+                                <span t-elif="doc.move_type == 'out_invoice'">Customer Invoice Entry / قيد فاتورة عميل</span>
+                                <span t-elif="doc.move_type == 'out_refund'">Credit Note Entry / قيد إشعار دائن</span>
+                                <span t-elif="doc.move_type == 'in_invoice'">Vendor Bill Entry / قيد فاتورة مورد</span>
+                                <span t-elif="doc.move_type == 'in_refund'">Debit Note Entry / قيد إشعار مدين</span>
+                                <span t-else="">Journal Entry / قيد يومية</span>
+                            </h2>
+                        </div>
+
+                        <!-- Entry Info Table -->
+                        <table style="width: 100%; margin-bottom: 20px; font-size: 12px;">
+                            <tr>
+                                <td style="width: 50%; padding: 4px 0;">
+                                    <strong>Entry Number / رقم القيد:</strong>
+                                    <span t-field="doc.name"/>
+                                </td>
+                                <td style="width: 50%; padding: 4px 0; text-align: right;">
+                                    <strong>Date / التاريخ:</strong>
+                                    <span t-field="doc.date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0;">
+                                    <strong>Journal / دفتر اليومية:</strong>
+                                    <span t-field="doc.journal_id"/>
+                                </td>
+                                <td style="padding: 4px 0; text-align: right;">
+                                    <strong>Status / الحالة:</strong>
+                                    <span t-if="doc.state == 'posted'" style="color: #2E7D32; font-weight: bold;">Posted / مرحّل</span>
+                                    <span t-elif="doc.state == 'draft'" style="color: #E65100;">Draft / مسودة</span>
+                                    <span t-else=""><t t-esc="doc.state"/></span>
+                                </td>
+                            </tr>
+                            <tr t-if="doc.partner_id">
+                                <td style="padding: 4px 0;">
+                                    <strong>Partner / الشريك:</strong>
+                                    <span t-field="doc.partner_id"/>
+                                </td>
+                                <td style="padding: 4px 0; text-align: right;" t-if="doc.ref">
+                                    <strong>Reference / المرجع:</strong>
+                                    <span t-field="doc.ref"/>
+                                </td>
+                            </tr>
+                            <tr t-if="doc.ref and not doc.partner_id">
+                                <td style="padding: 4px 0;">
+                                    <strong>Reference / المرجع:</strong>
+                                    <span t-field="doc.ref"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr t-if="doc.move_type in ('out_invoice', 'in_invoice', 'out_refund', 'in_refund')">
+                                <td style="padding: 4px 0;">
+                                    <strong>Amount Total / المبلغ الإجمالي:</strong>
+                                    <span t-field="doc.amount_total" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                </td>
+                                <td style="padding: 4px 0; text-align: right;">
+                                    <strong>Payment Status / حالة الدفع:</strong>
+                                    <span t-if="doc.payment_state == 'paid'" style="color: #2E7D32; font-weight: bold;">Paid / مدفوع</span>
+                                    <span t-elif="doc.payment_state == 'not_paid'" style="color: #C62828;">Not Paid / غير مدفوع</span>
+                                    <span t-elif="doc.payment_state == 'partial'" style="color: #E65100;">Partial / جزئي</span>
+                                    <span t-else=""><t t-esc="doc.payment_state"/></span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr style="border: 1px solid #5c4848; margin-bottom: 15px;"/>
+
+                        <!-- Journal Entry Lines -->
+                        <table class="table table-sm" style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                            <thead>
+                                <tr style="background-color: #5c4848; color: white;">
+                                    <th style="padding: 8px; border: 1px solid #5c4848; width: 5%; color: white;">#</th>
+                                    <th style="padding: 8px; border: 1px solid #5c4848; width: 30%; color: white;">Account / الحساب</th>
+                                    <th style="padding: 8px; border: 1px solid #5c4848; width: 25%; color: white;">Label / البيان</th>
+                                    <th style="padding: 8px; border: 1px solid #5c4848; width: 15%; color: white;">Partner / الشريك</th>
+                                    <th style="padding: 8px; border: 1px solid #5c4848; width: 12.5%; text-align: right; color: white;">Debit / مدين</th>
+                                    <th style="padding: 8px; border: 1px solid #5c4848; width: 12.5%; text-align: right; color: white;">Credit / دائن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="seq" t-value="0"/>
+                                <t t-set="total_debit" t-value="0"/>
+                                <t t-set="total_credit" t-value="0"/>
+                                <t t-foreach="doc.line_ids.sorted(key=lambda l: (-l.debit, l.credit))" t-as="line">
+                                    <t t-set="seq" t-value="seq + 1"/>
+                                    <t t-set="total_debit" t-value="total_debit + line.debit"/>
+                                    <t t-set="total_credit" t-value="total_credit + line.credit"/>
+                                    <tr t-attf-style="background-color: {{ '#f9f9f9' if seq % 2 == 0 else '#ffffff' }};">
+                                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; text-align: center;">
+                                            <t t-esc="seq"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; border: 1px solid #dee2e6;">
+                                            <span t-esc="line.account_id.code"/> <span t-esc="line.account_id.name"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; border: 1px solid #dee2e6;">
+                                            <span t-esc="line.name or ''"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; border: 1px solid #dee2e6;">
+                                            <span t-esc="line.partner_id.name or ''"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; text-align: right;">
+                                            <span t-if="line.debit" t-esc="'{:,.2f}'.format(line.debit)"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; text-align: right;">
+                                            <span t-if="line.credit" t-esc="'{:,.2f}'.format(line.credit)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #f0eded; font-weight: bold;">
+                                    <td colspan="4" style="padding: 8px; border: 1px solid #5c4848; text-align: right;">
+                                        TOTAL / الإجمالي
+                                    </td>
+                                    <td style="padding: 8px; border: 1px solid #5c4848; text-align: right;">
+                                        <span t-esc="'{:,.2f}'.format(total_debit)"/>
+                                    </td>
+                                    <td style="padding: 8px; border: 1px solid #5c4848; text-align: right;">
+                                        <span t-esc="'{:,.2f}'.format(total_credit)"/>
+                                    </td>
+                                </tr>
+                                <tr t-if="abs(total_debit - total_credit) &lt; 0.01" style="background-color: #E8F5E9;">
+                                    <td colspan="6" style="padding: 6px 8px; text-align: center; color: #2E7D32; font-weight: bold; border: 1px solid #dee2e6;">
+                                        ✅ Balanced / متوازن
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- Notes -->
+                        <div t-if="doc.narration" style="margin-top: 15px; padding: 10px; background: #FFF8E1; border-left: 4px solid #F9A825; font-size: 11px;">
+                            <strong>Notes / ملاحظات:</strong><br/>
+                            <span t-field="doc.narration"/>
+                        </div>
+
+                        <!-- Footer info -->
+                        <div style="margin-top: 30px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #dee2e6; padding-top: 10px;">
+                            <p>Printed on <span t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M')"/> | <span t-esc="doc.company_id.name"/></p>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

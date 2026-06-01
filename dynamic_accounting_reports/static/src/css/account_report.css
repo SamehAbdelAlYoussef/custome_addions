@@ -1,0 +1,680 @@
+/* ================================================
+   Odoo Enterprise Report — Exact Match
+   ================================================ */
+
+/*
+ * Scroll fix: Don't fight Odoo's action manager.
+ * .o_action_manager has overflow:auto and flex layout.
+ * We just need our content to have natural height and
+ * not be constrained by flex shrinking.
+ *
+ * Also target ALL parent wrappers Odoo might add.
+ */
+
+/* Force scroll on Odoo's action manager and any wrapper */
+.o_action_manager {
+    overflow: auto !important;
+}
+
+/* Remove o_action constraints if Odoo adds them */
+.o_action_manager > .o_action {
+    overflow: auto !important;
+    min-height: auto !important;
+    height: auto !important;
+}
+
+.o_ent_report {
+    background: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow-x: auto !important;
+    width: 100%;
+}
+
+.o_ent_main {
+    display: block;
+    overflow-x: auto !important;
+}
+
+/* Loading */
+.o_ent_loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    color: #714B67;
+}
+
+/* ================================================
+   TOP BAR — Enterprise control panel
+   PDF | XLSX | Report Name ⚙ | pills...
+   ================================================ */
+.o_ent_topbar {
+    background: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.o_ent_topbar_inner {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+    min-height: 44px;
+}
+
+/* PDF Button — Enterprise red/pink */
+.o_ent_btn_pdf {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border: none;
+    border-radius: 4px;
+    background: #714B67;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.o_ent_btn_pdf:hover {
+    background: #5a3a52;
+}
+
+/* XLSX Button */
+.o_ent_btn_xlsx {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: #fff;
+    color: #212529;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.o_ent_btn_xlsx:hover {
+    background: #f0f0f0;
+    border-color: #adb5bd;
+}
+
+/* Report Name */
+.o_ent_report_name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #212529;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+
+.o_ent_gear {
+    font-size: 13px;
+    color: #6c757d;
+    margin-left: 4px;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.o_ent_gear:hover {
+    color: #714B67;
+}
+
+/* Separator */
+.o_ent_sep {
+    display: inline-block;
+    width: 1px;
+    height: 24px;
+    background: #dee2e6;
+    margin: 0 4px;
+}
+
+/* ================================================
+   FILTER PILLS — Enterprise inline pills
+   ================================================ */
+.o_ent_pill_wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+.o_ent_pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    background: #fff;
+    color: #212529;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    line-height: 1.4;
+}
+
+.o_ent_pill:hover {
+    background: #f0f0f5;
+    border-color: #adb5bd;
+}
+
+.o_ent_pill.active {
+    background: #f0ecef;
+    border-color: #714B67;
+    color: #714B67;
+}
+
+.o_ent_pill i {
+    font-size: 12px;
+}
+
+/* ================================================
+   DROPDOWN MENUS
+   ================================================ */
+.o_ent_dd_anchor {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 200;
+}
+
+.o_ent_dd_menu {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    min-width: 220px;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    z-index: 200;
+    padding: 4px 0;
+}
+
+.o_ent_pill_wrap .o_ent_dd_menu {
+    top: calc(100% + 4px);
+}
+
+.o_ent_dd_scroll {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.o_ent_dd_item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: #212529;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.o_ent_dd_item:hover {
+    background: #f0f0f5;
+}
+
+.o_ent_dd_item i {
+    width: 16px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.o_ent_dd_item i.fa-check-square-o,
+.o_ent_dd_item i.fa-check {
+    color: #714B67;
+}
+
+.o_ent_dd_hr {
+    height: 1px;
+    background: #e9ecef;
+    margin: 4px 0;
+}
+
+.o_ent_dd_section {
+    padding: 8px 14px;
+}
+
+.o_ent_dd_label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.o_ent_input {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    outline: none;
+}
+
+.o_ent_input:focus {
+    border-color: #714B67;
+    box-shadow: 0 0 0 2px rgba(113,75,103,0.15);
+}
+
+.o_ent_jcode {
+    display: inline-block;
+    background: #e9ecef;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: monospace;
+    color: #495057;
+}
+
+/* ================================================
+   WARNING BANNER — Green left border
+   ================================================ */
+.o_ent_banner {
+    padding: 10px 16px;
+    background: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+    font-size: 13px;
+}
+
+.o_ent_banner i {
+    margin-right: 6px;
+}
+
+/* ================================================
+   REPORT TABLE — Enterprise exact
+   ================================================ */
+.o_ent_content {
+    flex: 1;
+    background: #f0f0f0;
+    padding: 24px 24px 48px;
+    overflow-x: auto !important;
+}
+
+.o_ent_table_wrap {
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    overflow-x: auto !important;
+    overflow-y: visible;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    margin: 0 auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.o_ent_table {
+    width: 100%;
+    min-width: 1100px;
+    border-collapse: collapse;
+    font-size: 13px;
+    color: #212529;
+}
+
+/* Period header row — "As of 02/12/2026" */
+.o_ent_period_row th {
+    background: #fff;
+    border: none;
+    padding: 0;
+}
+
+.o_ent_period_header {
+    text-align: center !important;
+    font-size: 12px;
+    font-weight: 600;
+    color: #212529;
+    padding: 10px 16px 4px !important;
+    border-bottom: none !important;
+}
+
+/* Column headers */
+.o_ent_table thead tr:last-child {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.o_ent_th_name {
+    text-align: left;
+    padding: 8px 16px;
+    min-width: 200px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    background: #fff;
+}
+
+.o_ent_th_num {
+    text-align: right;
+    padding: 8px 12px;
+    min-width: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    white-space: nowrap;
+    background: #fff;
+}
+
+/* Sort icon */
+.o_ent_sort_icon {
+    font-size: 10px;
+    color: #adb5bd;
+    margin-right: 4px;
+}
+
+/* ================================================
+   TABLE BODY — Rows
+   ================================================ */
+.o_ent_table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.1s;
+}
+
+.o_ent_table tbody tr:hover {
+    background: #f8f4f7 !important;
+}
+
+/* Name cell */
+.o_ent_td_name {
+    text-align: left;
+    padding: 8px 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 350px;
+}
+
+/* Number cell */
+.o_ent_td_num {
+    text-align: right;
+    padding: 8px 12px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+/* Zero values — muted like Enterprise */
+.o_ent_zero {
+    color: #adb5bd;
+}
+
+/* Negative — red like Enterprise */
+.o_ent_red {
+    color: #dc3545;
+}
+
+/* Caret / fold icon */
+.o_ent_caret {
+    display: inline-block;
+    width: 20px;
+    cursor: pointer;
+    color: #495057;
+    margin-right: 4px;
+}
+
+.o_ent_caret:hover {
+    color: #714B67;
+}
+
+.o_ent_caret i {
+    font-size: 12px;
+}
+
+/* Move link */
+.o_ent_link {
+    color: #714B67;
+    cursor: pointer;
+}
+
+.o_ent_link:hover {
+    text-decoration: underline;
+}
+
+.o_ent_muted {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+/* ================================================
+   LEVEL STYLES
+   ================================================ */
+
+/* Level 0 — Report section totals */
+.o_ent_level_0 td {
+    font-weight: 700;
+    font-size: 13px;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+/* Level 1 — Group headers (accounts, partners) */
+.o_ent_level_1 {
+    background: #fafbfc !important;
+}
+
+.o_ent_level_1 td {
+    font-weight: 600;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Level 2 — Normal lines */
+.o_ent_level_2 td {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+
+/* Level 3 — Detail sub-lines */
+.o_ent_level_3 td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    font-size: 12px;
+    color: #495057;
+}
+
+/* ================================================
+   TITLE / TOTAL LINE STYLES
+   ================================================ */
+
+/* Grey band group header (LIABILITIES, EQUITY) — Enterprise style */
+.o_ent_group_header {
+    background: #e0e0e0 !important;
+}
+
+.o_ent_group_header td {
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    padding: 10px 16px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #212529;
+}
+
+/* Bold section headers (Current Assets, Current Liabilities) */
+.o_ent_section_header {
+    background: #fff !important;
+}
+
+.o_ent_section_header td {
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    padding: 10px 16px !important;
+    color: #212529;
+}
+
+/* Title line — section headers */
+.o_ent_title {
+    background: #f0f2f5 !important;
+    border-top: 1px solid #dee2e6;
+}
+
+.o_ent_title td {
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    padding-top: 12px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Total lines */
+.o_ent_total,
+tr.total {
+    background: #f8f9fa !important;
+    border-top: 1px solid #ccc;
+}
+
+.o_ent_total td,
+tr.total td {
+    font-weight: 700 !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Grand total */
+.o_ent_line.o_account_report_grand_total,
+tr.o_account_report_grand_total {
+    background: #e8e4e7 !important;
+    border-top: 2px solid #714B67;
+    border-bottom: 2px solid #714B67;
+}
+
+.o_ent_line.o_account_report_grand_total td,
+tr.o_account_report_grand_total td {
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+/* Child lines — slightly indented bg */
+.o_ent_child {
+    background: #fefefe;
+}
+
+/* ================================================
+   EMPTY STATE
+   ================================================ */
+.o_ent_empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.o_ent_empty i {
+    margin-right: 8px;
+    opacity: 0.4;
+}
+
+/* ================================================
+   PRINT
+   ================================================ */
+@media print {
+    .o_ent_topbar,
+    .o_ent_banner {
+        display: none !important;
+    }
+
+    .o_ent_content {
+        padding: 0;
+    }
+
+    .o_ent_table {
+        font-size: 10px;
+    }
+
+    .o_ent_th_name,
+    .o_ent_th_num {
+        background: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+@media (max-width: 768px) {
+    .o_ent_topbar_inner {
+        padding: 6px 8px;
+        gap: 4px;
+    }
+
+    .o_ent_pill {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .o_ent_content {
+        padding: 8px;
+    }
+
+    .o_ent_th_name {
+        min-width: 180px;
+    }
+
+    .o_ent_th_num,
+    .o_ent_td_num {
+        min-width: 70px;
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+}
+
+
+/* Green left border on grey band headers */
+.o_ent_group_header td:first-child {
+    border-left: 3px solid #71af2f;
+}
+
+/* Partner dropdown search box */
+.o_ent_dd_search {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 4px;
+}
+
+.o_ent_dd_search input {
+    width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 12px;
+    outline: none;
+}
+
+.o_ent_dd_search input:focus {
+    border-color: #714B67;
+    box-shadow: 0 0 0 2px rgba(113,75,103,0.1);
+}
+
+/* Badge on pill */
+.o_ent_badge {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+/* Clear selection link */
+.o_ent_dd_clear {
+    padding: 5px 12px;
+    font-size: 12px;
+    color: #dc3545;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 4px;
+}
+
+.o_ent_dd_clear:hover {
+    background: #fff5f5;
+}

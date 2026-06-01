@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_ms_subscription_form" model="ir.ui.view">
+        <field name="name">ms.subscription.form</field>
+        <field name="model">ms.subscription</field>
+        <field name="arch" type="xml">
+            <form string="Subscription">
+                <header>
+                    <button name="action_start_trial" string="Start Trial"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_activate" string="Activate"
+                            type="object" class="btn-success"
+                            invisible="state not in ('trial','paused','expired')"/>
+                    <button name="action_change_plan" string="Change Plan"
+                            type="object"
+                            invisible="state not in ('trial','active')"/>
+                    <button name="action_create_invoice" string="Create Invoice"
+                            type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_open_database" string="🔗 Open Customer DB"
+                            type="object" class="btn-info"
+                            invisible="not db_name"/>
+                    <button name="action_pause" string="Pause"
+                            type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_sync_modules" string="Sync Modules"
+                            type="object" class="btn-warning"
+                            invisible="not db_name"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object" class="btn-danger"
+                            invisible="state in ('cancelled','expired')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,trial,active,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-file-text">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Customer">
+                            <field name="partner_id"/>
+                            <field name="company_name"/>
+                            <field name="email" widget="email"/>
+                            <field name="phone" widget="phone"/>
+                        </group>
+                        <group string="Plan">
+                            <field name="template_id"/>
+                            <field name="billing_cycle"/>
+                            <field name="extra_user_packs"/>
+                            <field name="total_users"/>
+                            <field name="total_amount" widget="monetary"/>
+                            <field name="total_paid" widget="monetary"/>
+                        </group>
+                        <group string="Database">
+                            <field name="db_name" readonly="1"/>
+                            <field name="subdomain" readonly="1"/>
+                            <field name="url" widget="url" readonly="1"/>
+                            <field name="db_id" readonly="1"/>
+                            <field name="admin_login" readonly="1"/>
+                            <field name="admin_pass" readonly="1" password="False"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="date_start"/>
+                            <field name="trial_end" readonly="1"/>
+                            <field name="date_next_invoice"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ms_subscription_list" model="ir.ui.view">
+        <field name="name">ms.subscription.list</field>
+        <field name="model">ms.subscription</field>
+        <field name="arch" type="xml">
+            <list string="Subscriptions"
+                  decoration-success="state == 'active'"
+                  decoration-warning="state == 'trial'"
+                  decoration-danger="state in ('expired','cancelled')"
+                  decoration-muted="state == 'paused'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="company_name"/>
+                <field name="template_id"/>
+                <field name="billing_cycle"/>
+                <field name="total_amount"/>
+                <field name="db_name"/>
+                <field name="subdomain"/>
+                <field name="date_start"/>
+                <field name="trial_end"/>
+                <field name="date_next_invoice"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-warning="state == 'trial'"
+                       decoration-danger="state in ('expired','cancelled')"/>
+                <button name="action_open_database" type="object"
+                        string="Open DB" icon="fa-external-link"
+                        invisible="not db_name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ms_subscription_search" model="ir.ui.view">
+        <field name="name">ms.subscription.search</field>
+        <field name="model">ms.subscription</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="company_name"/>
+                <field name="template_id"/>
+                <field name="db_name"/>
+                <filter string="Trial" name="trial" domain="[('state','=','trial')]"/>
+                <filter string="Active" name="active" domain="[('state','=','active')]"/>
+                <filter string="Expired" name="expired" domain="[('state','=','expired')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state','=','cancelled')]"/>
+                <separator/>
+                <filter string="Monthly" name="monthly" domain="[('billing_cycle','=','monthly')]"/>
+                <filter string="Yearly" name="yearly" domain="[('billing_cycle','=','yearly')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Plan" name="by_plan" context="{'group_by': 'template_id'}"/>
+                    <filter string="State" name="by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Billing Cycle" name="by_cycle" context="{'group_by': 'billing_cycle'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_ms_subscription" model="ir.actions.act_window">
+        <field name="name">Subscriptions</field>
+        <field name="res_model">ms.subscription</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ms_subscription_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+</odoo>

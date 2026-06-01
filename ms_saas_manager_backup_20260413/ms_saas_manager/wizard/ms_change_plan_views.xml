@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ms_change_plan_form" model="ir.ui.view">
+        <field name="name">ms.change.plan.form</field>
+        <field name="model">ms.change.plan</field>
+        <field name="arch" type="xml">
+            <form string="Change Plan">
+                <group>
+                    <field name="subscription_id" readonly="1"/>
+                    <field name="current_template_id" readonly="1"/>
+                    <field name="new_template_id"/>
+                    <field name="new_billing_cycle"/>
+                    <field name="install_new_modules"/>
+                    <field name="notes" placeholder="Reason for change..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_change" string="Confirm Change"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ms_change_plan" model="ir.actions.act_window">
+        <field name="name">Change Plan</field>
+        <field name="res_model">ms.change.plan</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

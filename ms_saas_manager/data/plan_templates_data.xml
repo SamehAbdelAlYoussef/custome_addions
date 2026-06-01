@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ── BASIC ─────────────────────────────────── -->
+        <record id="plan_basic" model="ms.plan.template">
+            <field name="name">Basic</field>
+            <field name="name_ar">الأساسية</field>
+            <field name="code">basic</field>
+            <field name="sequence">1</field>
+            <field name="monthly_price">1999</field>
+            <field name="yearly_price">19990</field>
+            <field name="max_users">5</field>
+            <field name="trial_days">14</field>
+            <field name="is_featured">False</field>
+            <field name="description">For small businesses with an internal accounting team</field>
+            <field name="features">Odoo Online System
+5 Users Included
+Initial Accounting Setup
+Chart of Accounts + Taxes
+Secure Cloud Hosting
+Basic Technical Support</field>
+        </record>
+
+        <record id="plan_basic_mod1" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_basic"/>
+            <field name="sequence">1</field>
+            <field name="name">base</field>
+            <field name="label">Base</field>
+            <field name="category">standard</field>
+            <field name="is_required">True</field>
+        </record>
+        <record id="plan_basic_mod2" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_basic"/>
+            <field name="sequence">2</field>
+            <field name="name">web</field>
+            <field name="label">Web Interface</field>
+            <field name="category">standard</field>
+            <field name="is_required">True</field>
+        </record>
+        <record id="plan_basic_mod3" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_basic"/>
+            <field name="sequence">3</field>
+            <field name="name">account</field>
+            <field name="label">Accounting</field>
+            <field name="category">account</field>
+            <field name="is_required">True</field>
+        </record>
+        <record id="plan_basic_mod4" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_basic"/>
+            <field name="sequence">4</field>
+            <field name="name">mail</field>
+            <field name="label">Email &amp; Messaging</field>
+            <field name="category">standard</field>
+            <field name="is_required">True</field>
+        </record>
+
+        <!-- ── PROFESSIONAL ──────────────────────────── -->
+        <record id="plan_pro" model="ms.plan.template">
+            <field name="name">Professional</field>
+            <field name="name_ar">الاحترافية</field>
+            <field name="code">pro</field>
+            <field name="sequence">2</field>
+            <field name="monthly_price">4999</field>
+            <field name="yearly_price">49990</field>
+            <field name="max_users">5</field>
+            <field name="trial_days">14</field>
+            <field name="is_featured">False</field>
+            <field name="description">For companies needing full accounting operations</field>
+            <field name="features">Everything in Basic
+5 Users Included
+Online Accountant for Daily Entries
+Customer/Vendor/Bank Reconciliation
+Tax Declaration Follow-up
+Monthly Financial Reports</field>
+        </record>
+
+        <record id="plan_pro_mod1" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_pro"/>
+            <field name="sequence">1</field><field name="name">base</field>
+            <field name="label">Base</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_pro_mod2" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_pro"/>
+            <field name="sequence">2</field><field name="name">web</field>
+            <field name="label">Web Interface</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_pro_mod3" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_pro"/>
+            <field name="sequence">3</field><field name="name">account</field>
+            <field name="label">Accounting</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_pro_mod4" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_pro"/>
+            <field name="sequence">4</field><field name="name">account_accountant</field>
+            <field name="label">Accounting (Full)</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_pro_mod5" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_pro"/>
+            <field name="sequence">5</field><field name="name">mail</field>
+            <field name="label">Email &amp; Messaging</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+
+        <!-- ── ADVANCED ───────────────────────────────── -->
+        <record id="plan_advanced" model="ms.plan.template">
+            <field name="name">Advanced</field>
+            <field name="name_ar">المتقدمة</field>
+            <field name="code">advanced</field>
+            <field name="sequence">3</field>
+            <field name="monthly_price">9999</field>
+            <field name="yearly_price">99990</field>
+            <field name="max_users">5</field>
+            <field name="trial_days">14</field>
+            <field name="is_featured">True</field>
+            <field name="badge">Most Popular</field>
+            <field name="description">For companies needing professional financial insight</field>
+            <field name="features">Everything in Professional
+5 Users Included
+Periodic Online Review
+Full Monthly Financial Analysis
+P&amp;L Report + Profitability Analysis
+Cash Flow Monitoring
+Financial KPIs Dashboard</field>
+        </record>
+
+        <record id="plan_adv_mod1" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_advanced"/>
+            <field name="sequence">1</field><field name="name">base</field>
+            <field name="label">Base</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_adv_mod2" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_advanced"/>
+            <field name="sequence">2</field><field name="name">account</field>
+            <field name="label">Accounting</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_adv_mod3" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_advanced"/>
+            <field name="sequence">3</field><field name="name">account_accountant</field>
+            <field name="label">Accounting (Full)</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_adv_mod4" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_advanced"/>
+            <field name="sequence">4</field><field name="name">analytic</field>
+            <field name="label">Analytic Accounting</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_adv_mod5" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_advanced"/>
+            <field name="sequence">5</field><field name="name">board</field>
+            <field name="label">Dashboard</field><field name="category">standard</field><field name="is_required">False</field>
+        </record>
+        <record id="plan_adv_mod6" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_advanced"/>
+            <field name="sequence">6</field><field name="name">mail</field>
+            <field name="label">Email &amp; Messaging</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+
+        <!-- ── EXECUTIVE ──────────────────────────────── -->
+        <record id="plan_executive" model="ms.plan.template">
+            <field name="name">Executive</field>
+            <field name="name_ar">التنفيذية الشاملة</field>
+            <field name="code">executive</field>
+            <field name="sequence">4</field>
+            <field name="monthly_price">14999</field>
+            <field name="yearly_price">149990</field>
+            <field name="max_users">5</field>
+            <field name="trial_days">14</field>
+            <field name="is_featured">False</field>
+            <field name="badge">Outsourced CFO</field>
+            <field name="description">For medium/large companies seeking full outsourced financial management</field>
+            <field name="features">Everything in Advanced
+5 Users Included
+Dedicated Remote Accountant
+Periodic On-Site Review
+Monthly Management Meetings
+Budget Preparation &amp; Financial Planning
+Direct Owner Support</field>
+        </record>
+
+        <record id="plan_exec_mod1" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">1</field><field name="name">base</field>
+            <field name="label">Base</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_exec_mod2" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">2</field><field name="name">account</field>
+            <field name="label">Accounting</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_exec_mod3" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">3</field><field name="name">account_accountant</field>
+            <field name="label">Accounting (Full)</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_exec_mod4" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">4</field><field name="name">analytic</field>
+            <field name="label">Analytic Accounting</field><field name="category">account</field><field name="is_required">True</field>
+        </record>
+        <record id="plan_exec_mod5" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">5</field><field name="name">hr</field>
+            <field name="label">Human Resources</field><field name="category">hr</field><field name="is_required">False</field>
+        </record>
+        <record id="plan_exec_mod6" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">6</field><field name="name">board</field>
+            <field name="label">Dashboard</field><field name="category">standard</field><field name="is_required">False</field>
+        </record>
+        <record id="plan_exec_mod7" model="ms.plan.template.module">
+            <field name="template_id" ref="plan_executive"/>
+            <field name="sequence">7</field><field name="name">mail</field>
+            <field name="label">Email &amp; Messaging</field><field name="category">standard</field><field name="is_required">True</field>
+        </record>
+
+    </data>
+</odoo>

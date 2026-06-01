@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <t t-name="sh_entmate_theme.ToDoTemplate">
+        <t t-if="sh_enable_todo_mode">
+            <div class="todo sh_menu_systray">
+                <span class="float-right fa fa-tasks" id="todo_icon" t-on-click="_click_todo" style="font-size: 16px !important;"/>
+            </div>
+
+            <t t-if="state.show_todo">
+                <div class="todo_layout" id="todo_layout">
+                    <div class="theme_header d-flex">
+                        <h3>To Do</h3>
+                        <i class="fa fa-close close_todo_setting" t-on-click="_close_todo"></i>
+                    </div>
+                    <div class="add_todo_section">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control sh_add_todo_input" required="required" t-on-keydown="add_todo" placeholder="Add To Do..." aria-label="Add To Do..." aria-describedby="basic-addon2" t-model="state.input_value"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary sh_add_todo" t-on-click="_click_add_todo" type="button">Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sh_main_todo_list">
+                        <t t-if="state.todo_datas">
+                            <t t-foreach="state.todo_datas" t-as="todo_item" t-key="todo_item.id">
+                                <div class="sh_main_card">
+                                    <div class="card-header card" id="headingOne">
+                                        <div class="sh-card-header d-flex">
+                                            <div class="sh_checkbox_todo o-checkbox custom-control custom-checkbox">
+                                                <t t-if="todo_item.is_done">
+                                                    <div class="o-checkbox form-check d-flex m-0" t-on-click="_click_sh_todo_checklist" t-att-id="todo_item.id">
+                                                        <input type="checkbox"  checked="checked" t-on-change="_click_sh_todo_checklist" t-att-id="todo_item.id" class="form-check-input sh_todo_checklist" />
+                                                        <label t-att-for="rec" class="form-check-label"></label>
+                                                    </div>
+
+                                                    <!-- <input checked="checked" type="checkbox" class="form-check-input custom-control-input " /> -->
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="o-checkbox form-check d-flex m-0" t-on-click="_click_sh_todo_checklist" t-att-id="todo_item.id">
+                                                        <input type="checkbox" t-on-change="_click_sh_todo_checklist" t-att-id="todo_item.id" class="form-check-input sh_todo_checklist" />
+                                                        <label t-att-for="rec" class="form-check-label"></label>
+                                                    </div>
+                                                </t>
+
+                                                <!-- <label class="form-check-label custom-control-label"></label> -->
+                                                <!-- <span class="sh_mark_completed_tooltip">Mark Completed</span> -->
+                                            </div>
+                                            <div class="sh-card-header-button d-flex gap-2 justify-content-end ms-auto">
+                                                <div class="sh_to_do_edit_btn">
+                                                    <span class="fa fa-pencil sh_header_pencil" t-on-click="_click_sh_header_pencil" t-att-id="todo_item.id" />
+                                                    <!-- <span class="sh_mark_edit_tooltip">Edit</span> -->
+                                                </div>
+                                                <div class="sh_to_do_save_btn">
+                                                    <span class="fa fa-save sh_header_save" t-on-click="onBlurTextArea" t-att-id="todo_item.id" style="display:none;" />
+                                                    <!-- <span class="sh_mark_save_tooltip">Save</span> -->
+                                                </div>
+                                                <div class="sh_to_do_remove_btn">
+                                                    <span class="fa fa-times sh_header_times" t-on-click="_remove_todo" t-att-id="todo_item.id" />
+                                                    <!-- <span class="sh_mark_remove_tooltip">Remove</span> -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="card-body">
+                                                <span t-att-class="todo_item.is_done ? 'sh_todo_label sh_done_todo' : 'sh_todo_label'">
+                                                    <t t-esc="todo_item.name" />
+                                                </span>
+                                                <t t-if="state.edit_id == todo_item.id">
+                                                    <textarea class="sh_todo_description" t-att-id="todo_item.id" style="white-space:normal;" autofocus="true" t-on-blur="onBlurTextArea">
+                                                        <t t-esc="todo_item.name" />
+                                                    </textarea>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+
+    <!-- <t t-if="state.show_todo">
+        <t t-name="sh_entmate_theme.TodoCard">
+        <div class="todo_layout d-flex" id="todo_layout">
+            <div class="theme_header">
+                <h3>To Do</h3>
+                <i class="fa fa-close close_todo_setting" t-on-click="_close_todo"></i>
+            </div>
+            <div class="add_todo_section">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control sh_add_todo_input" required="required" t-on-keydown="add_todo" placeholder="Add To Do..." aria-label="Add To Do..." aria-describedby="basic-addon2"/>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary sh_add_todo" t-on-click="_click_add_todo" type="button">Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="accordion">
+            </div>
+        </div>
+    </t>
+    </t> -->
+
+</template>

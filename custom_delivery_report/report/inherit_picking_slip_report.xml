@@ -1,0 +1,51 @@
+<odoo>
+	<data>
+
+
+		<template id="report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
+			<xpath expr="//table[@name='stock_move_line_table']" position="after">
+				<div style="text-align: right;">
+					<div class="row" name="custom_delivery_table" style="line-height: 1.8;">
+						<div class="col-6">
+							<div>فني التركيب 1</div>
+							<div>فني التركيب 2</div>
+							<div>فني التركيب 3</div>
+							<div>فني التركيب 4</div>
+						</div>
+						<div class="col-6">
+							<div>فني التوصيل 1</div>
+							<div>فني التوصيل 2</div>
+							<div>فني التوصيل 3</div>
+							<div>فني التوصيل 4</div>
+						</div>
+					</div>
+					<br/>
+					<div style="text-decoration: underline;">
+						إقرار الاستلام
+					</div>
+					<br/>
+					<br/>
+					<div>
+						تم استلام المنتجات بحالة جيدة
+					</div>
+
+					<br/>
+					<div style="border;margin-bottom: 10%;margin-top: 2%;color:blue;text-decoration: underline;">
+						ملاحظات
+					</div>
+					<div class="row" style="line-height: 1.5;color:red;">
+						<div class="col-4">
+							<div>المستلم</div>
+						</div>
+						<div class="col-4">
+							<div>الصفة</div>
+						</div>
+						<div class="col-4">
+							<div>التوقيع</div>
+						</div>
+					</div>
+				</div>
+			</xpath>
+		</template>
+	</data>
+</odoo>

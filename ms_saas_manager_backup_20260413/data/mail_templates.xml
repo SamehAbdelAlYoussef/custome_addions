@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Welcome / Trial Start -->
+        <record id="email_template_welcome" model="mail.template">
+            <field name="name">SaaS: Welcome &amp; Trial Started</field>
+            <field name="model_id" ref="ms_saas_manager.model_ms_subscription"/>
+            <field name="subject">Welcome to Manager Solutions — Your Trial is Ready! 🎉</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+  <div style="background:#1a5276;padding:30px;text-align:center;">
+    <h1 style="color:#fff;margin:0;">Manager Solutions</h1>
+    <p style="color:#aed6f1;margin:5px 0;">Cloud Accounting Platform</p>
+  </div>
+  <div style="padding:30px;background:#fff;">
+    <h2>Welcome, {{ object.partner_id.name }}! 👋</h2>
+    <p>Your <strong>{{ object.template_id.name }}</strong> free trial has started.</p>
+    <p><strong>Your system is ready at:</strong></p>
+    <div style="text-align:center;margin:20px 0;">
+      <a href="{{ object.url }}" style="background:#1a5276;color:#fff;padding:14px 28px;
+         border-radius:6px;text-decoration:none;font-size:16px;display:inline-block;">
+        🚀 Open My System
+      </a>
+    </div>
+    <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+      <tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>URL</strong></td>
+          <td style="padding:8px;border-bottom:1px solid #eee;">{{ object.url }}</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Plan</strong></td>
+          <td style="padding:8px;border-bottom:1px solid #eee;">{{ object.template_id.name }}</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Trial Ends</strong></td>
+          <td style="padding:8px;border-bottom:1px solid #eee;">{{ object.trial_end }}</td></tr>
+      <tr><td style="padding:8px;"><strong>Users</strong></td>
+          <td style="padding:8px;">{{ object.total_users }} users included</td></tr>
+    </table>
+    <p>Need help getting started? Reply to this email and our team will assist you.</p>
+  </div>
+  <div style="background:#f2f3f4;padding:20px;text-align:center;color:#888;font-size:12px;">
+    Manager Solutions · <a href="https://msolutions-eg.com">msolutions-eg.com</a>
+  </div>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Trial Ending Soon -->
+        <record id="email_template_trial_ending" model="mail.template">
+            <field name="name">SaaS: Trial Ending Soon</field>
+            <field name="model_id" ref="ms_saas_manager.model_ms_subscription"/>
+            <field name="subject">Your Manager Solutions trial ends in 3 days ⏰</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+  <div style="background:#e67e22;padding:30px;text-align:center;">
+    <h1 style="color:#fff;margin:0;">⏰ Trial Ending Soon</h1>
+  </div>
+  <div style="padding:30px;">
+    <p>Hi {{ object.partner_id.name }},</p>
+    <p>Your free trial ends on <strong>{{ object.trial_end }}</strong> — that's 3 days away!</p>
+    <p>To keep your data and continue using your system, subscribe now:</p>
+    <div style="text-align:center;margin:20px 0;">
+      <a href="https://msolutions-eg.com/pricing" style="background:#e67e22;color:#fff;
+         padding:14px 28px;border-radius:6px;text-decoration:none;font-size:16px;">
+        View Pricing Plans
+      </a>
+    </div>
+    <p>Questions? Reply to this email or call us at any time.</p>
+  </div>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Invoice -->
+        <record id="email_template_invoice" model="mail.template">
+            <field name="name">SaaS: Invoice</field>
+            <field name="model_id" ref="ms_saas_manager.model_ms_invoice"/>
+            <field name="subject">Invoice {{ object.name }} — Manager Solutions</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+  <div style="background:#1a5276;padding:30px;text-align:center;">
+    <h1 style="color:#fff;margin:0;">Invoice</h1>
+  </div>
+  <div style="padding:30px;">
+    <p>Dear {{ object.partner_id.name }},</p>
+    <p>Please find your invoice details below:</p>
+    <table style="width:100%;border-collapse:collapse;">
+      <tr style="background:#f2f3f4;">
+        <td style="padding:10px;"><strong>Invoice #</strong></td>
+        <td style="padding:10px;">{{ object.name }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px;"><strong>Plan</strong></td>
+        <td style="padding:10px;">{{ object.template_id.name }} ({{ object.billing_cycle }})</td>
+      </tr>
+      <tr style="background:#f2f3f4;">
+        <td style="padding:10px;"><strong>Amount</strong></td>
+        <td style="padding:10px;font-size:20px;color:#1a5276;"><strong>EGP {{ "%.2f"|format(object.amount) }}</strong></td>
+      </tr>
+      <tr>
+        <td style="padding:10px;"><strong>Due Date</strong></td>
+        <td style="padding:10px;">{{ object.due_date }}</td>
+      </tr>
+    </table>
+    {% if object.paymob_payment_url %}
+    <div style="text-align:center;margin:25px 0;">
+      <a href="{{ object.paymob_payment_url }}" style="background:#27ae60;color:#fff;
+         padding:14px 28px;border-radius:6px;text-decoration:none;font-size:16px;">
+        💳 Pay Now Online
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Cancelled -->
+        <record id="email_template_cancelled" model="mail.template">
+            <field name="name">SaaS: Subscription Cancelled</field>
+            <field name="model_id" ref="ms_saas_manager.model_ms_subscription"/>
+            <field name="subject">Your Manager Solutions subscription has been cancelled</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:30px;">
+  <h2>Subscription Cancelled</h2>
+  <p>Hi {{ object.partner_id.name }},</p>
+  <p>Your subscription <strong>{{ object.name }}</strong> has been cancelled.</p>
+  <p>Your data will be retained for 30 days. If you wish to reactivate, please contact us.</p>
+  <p>Thank you for using Manager Solutions.</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Admin notification -->
+        <record id="email_template_admin_signup" model="mail.template">
+            <field name="name">SaaS: Admin — New Signup</field>
+            <field name="model_id" ref="ms_saas_manager.model_ms_subscription"/>
+            <field name="subject">🆕 New Signup: {{ object.partner_id.name }} — {{ object.template_id.name }}</field>
+            <field name="email_to">admin@msolutions-eg.com</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family:Arial,sans-serif;padding:20px;">
+  <h2>New Customer Signup</h2>
+  <table>
+    <tr><td><strong>Name:</strong></td><td>{{ object.partner_id.name }}</td></tr>
+    <tr><td><strong>Email:</strong></td><td>{{ object.email }}</td></tr>
+    <tr><td><strong>Phone:</strong></td><td>{{ object.phone }}</td></tr>
+    <tr><td><strong>Company:</strong></td><td>{{ object.company_name }}</td></tr>
+    <tr><td><strong>Plan:</strong></td><td>{{ object.template_id.name }}</td></tr>
+    <tr><td><strong>Billing:</strong></td><td>{{ object.billing_cycle }}</td></tr>
+    <tr><td><strong>Ref:</strong></td><td>{{ object.name }}</td></tr>
+  </table>
+</div>
+            ]]></field>
+        </record>
+
+    </data>
+</odoo>

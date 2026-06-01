@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="sh_entmate_theme.LanguageTemplate" owl="1">
+        <t t-if="state.enable_languages">
+            <div class="sh_language_selector p-0">
+                <Dropdown position="'bottom-end'"  beforeOpen.bind="onBeforeOpen">
+                        <i class="fa fa-language" aria-hidden="true"></i>
+                <t t-set-slot="content">
+                        <div class=" sh_language_main o-mail-ActivityMenu bg-view flex-grow-1 d-flex flex-column" style="min-height: auto;">
+                            <div class="d-flex flex-column list-group-flush">
+                                <t t-foreach="languages_list" t-as="language" t-key="language.id">
+                                    <div class="o-mail-ActivityGroup list-group-item list-group-item-action d-flex py-1 px-2 cursor-pointer " t-on-click="() => this.change_sh_user_lang(language)">
+                                        <img class="sh_lang_flag" t-att-src="language[2]"/>
+                                        <span>
+                                            <t t-esc="language[1]"/>
+                                        </span>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                        </t>
+                </Dropdown>
+            </div>
+        </t>
+
+    </t>
+</templates>

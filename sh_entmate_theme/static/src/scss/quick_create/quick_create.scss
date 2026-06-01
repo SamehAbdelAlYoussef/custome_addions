@@ -1,0 +1,16 @@
+.o_menu_systray{position: relative;
+    .sh_droupdown{position: absolute;top: 40px;left: 0;z-index: 31;background: #fff;border-top: 2px solid $primaryColor;border-bottom: 2px solid $primaryColor;box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 50px;padding: 10px !important;
+        .sh_dropdown_inner {padding-top: 10px !important;}
+        .sh_main_heading{display: flex; align-items: center;
+            .sh_main_icon{margin-left: 30px;}
+            .sh_dropdown_menu_heading{
+                .sh_create_title{margin: 0;}
+            }
+        }
+        .sh_create_record{
+            .text-end{
+                .btn {margin-top: 10px;}
+            }
+        }
+    }
+}

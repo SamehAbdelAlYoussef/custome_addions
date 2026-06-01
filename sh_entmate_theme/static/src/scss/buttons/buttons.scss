@@ -1,0 +1,114 @@
+.o_searchview_facet .o_searchview_facet_label .position-absolute , .o_searchview_facet_label  {
+    @if $button_style == "style_1" { border-radius: 0 !important; }
+    @if $button_style == "style_2" { border-radius: 5px !important; }
+    @if $button_style == "style_3" {border-radius: 0 10px !important; }
+    @if $button_style == "style_4" { border-radius: 15px !important; }
+}
+.btn, button { box-shadow: none !important;
+     &:not(.o_arrow_button )  {
+        @if $button_style == "style_1" { border-radius: 0 !important; }
+        @if $button_style == "style_2" { border-radius: 5px !important;
+            &.oe_stat_button , &.o_switch_view , &.o_pager_previous  , &.o_pager_next {border-radius: 0px !important;
+                &:first-child { border-radius: 5px 0 0 5px !important; }
+                &:last-child { border-radius: 0px 5px 5px 0px !important; }
+                &:only-child { border-radius: 5px !important; }
+            }
+        }
+        @if $button_style == "style_3" { border-radius: 0 10px !important;
+            &.oe_stat_button , &.o_switch_view , &.o_pager_previous , &.o_pager_next { border-radius: 0px !important;
+                &:first-child { border-radius: 0 0 0 10px !important; }
+                &:last-child { border-radius: 0px 10px 0 0px !important; 
+                    > .o_button_more  {border-radius: 0px 10px 0 0px !important; }
+                }
+                &:only-child { border-radius: 0 10px !important; }
+            }
+        }
+        @if $button_style == "style_4" {border-radius: 15px !important;
+            &.oe_stat_button , &.o_switch_view , &.o_pager_previous , &.o_pager_next {border-radius: 0px !important;
+                &:first-child { border-radius: 15px 0 0 15px !important; }
+                &:last-child { border-radius: 0px 15px 15px 0px !important; 
+                    > .o_button_more  {border-radius: 0px 15px 15px 0px !important; }
+                }
+                &:only-child { border-radius: 15px !important; }
+            }
+        }
+    }
+    &.btn-outline-primary {border-color: $primaryColor !important; color: $primaryColor !important;
+        &:hover { background: $primaryColor !important; color: #fff !important;}
+    }
+    &.btn-outline-secondary {color: $primaryColor !important;
+        i , span {color: $primaryColor !important; }
+        @include focus_secondary_btn;
+    }
+    &.btn-primary { background: $primaryColor !important; border-color: $primaryColor !important; color: #fff !important}
+    &.btn-secondary , &.o_kanban_add_column { @include focus_secondary_btn;
+        &.show { border-color: #017e84 !important; background: #e6f2f3 !important;}
+        &.o_arrow_button {
+            &:active {
+                &::before { background-color: #017e84 !important; }
+            }
+            &.o_arrow_button_current { background: #e6f2f3 !important ;
+                &::before { background-color: #017e84 !important; }
+            }
+        }
+        &.o_graph_button{
+            &.active{ background: #e6f2f3 !important ; border-color: #017e84 !important; }
+        }
+        &.o_selection_badge.active { border-color: #017e84 !important;  background: #e6f2f3 !important; } 
+    }
+    &.o-dropdown-caret {@include focus_secondary_btn;
+        &.show { border-color: #017e84 !important; background: #e6f2f3 !important; }
+    }
+    &.o_switch_view {
+        &.active { border-color: #017e84 !important; background: #e6f2f3 !important; }
+    }
+    &:active , &.focus { box-shadow: none !important; }
+}
+.attachment_div{
+    .sh_attachment_section {
+        .attachment_box  {
+            @if $button_style == "style_1" { border-radius: 0 !important; }
+            @if $button_style == "style_2" { border-radius: 5px !important; }
+            @if $button_style == "style_3" {border-radius: 0 10px !important; }
+            @if $button_style == "style_4" { border-radius: 15px !important; }
+        }
+    }
+}
+.o_main_navbar{
+    @include print-variable(o-navbar-height, $o-navbar-height);
+    .o_menu_brand_icon {
+        width: calc(var(--o-navbar-height));
+        object-fit: cover;
+    }
+}
+.toggle-container {
+  height: var(--o-navbar-height);
+  width: var(--o-navbar-height);
+  position: relative; // Ensure absolute children are positioned correctly
+}
+
+.toggle-image {
+  padding: 9px !important; // Padding only applies to the image
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none !important;
+}
+
+.toggle-container:hover .toggle-image {
+  display: none !important;
+}
+
+.toggle-container:hover .toggle-button {
+  display: inline-block !important;
+}
+.o_navbar_apps_menu .dropdown-toggle::after {
+  display: none !important;
+  content: none !important;
+}

@@ -1,0 +1,26 @@
+.o_web_client{
+    .o_navbar{
+        .o_main_navbar  { background: transparent !important ; border-color: transparent ;
+            .o_navbar_apps_menu{
+                .o_navbar_apps_menu{
+                    .dropdown-toggle{color: #1f2937;}
+                }
+            }
+            .o_menu_sections { align-items: center;
+                button , a {background: transparent; color:#1f2937; max-height: max-content !important; padding: 5px 10px;
+                    span {line-height: normal;}
+                    &:hover {background: #e7e9ed;}
+                    &:active {background: #e6f2f3;}
+                    &.show {color: #1f2937;}
+                }
+            }
+            .o_menu_brand {color: #1f2937;}
+            .o_menu_systray {align-items: center;
+               > div {padding: 0;}
+                 button , .fa {padding: 0 7px; color: #1f2937;
+                    .fa {padding: 0 !important;}
+                }
+            }
+        }
+    }
+}

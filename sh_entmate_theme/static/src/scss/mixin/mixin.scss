@@ -1,0 +1,11 @@
+@mixin focus_secondary_btn {
+    &:active {border-color: #017e84 !important;background: #e6f2f3 !important;}
+}
+
+.o_field_percent_pie .o_pie {
+    --PercentPieField-color-active: #{$primaryColor};
+}
+@mixin night_mode_secondary_button { background: #3C3E4B ; border-color: #3C3E4B ; color: #e4e4e4 !important;  
+    &:active { background: #17373b !important; border-color: #03f9e3 !important;}  
+    &:hover {background: #5a5e6b !important; border-color: #5a5e6b !important;}
+}

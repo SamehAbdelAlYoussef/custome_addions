@@ -1,0 +1,16 @@
+
+.o_menu_systray{
+		.calculator{position: absolute;top: 42px;min-width: 240px;margin: 0.125rem  0 0;font-size: 1.08333333rem;color: #4c4c4c;list-style: none;-webkit-box-flex: 0;flex: 0 1 auto;width: 240px;max-height: 400px;z-index: 1100;left: auto;background:#F9F9F9;box-shadow: 0 6px 12px -4px rgba(black, 0.25);
+			.row {justify-content: center; width: 100%;
+				&.displayBox{
+					.displayText{font-size: 22px; background: $primaryColor !important; color: #fff; border: 0 !important; text-align: center;}
+				}
+				&.numberPad{
+					.btn {width: 40px;height: 40px;margin: 5px;border: none;
+						&.btn-calc{background: #dee2e6; color: #343a40;}
+						&.btn-operation , &#clear , &#sqrt , &#square {background: $primaryColor !important;color: #fff !important;}
+					}
+				}
+			}
+		}
+	} 

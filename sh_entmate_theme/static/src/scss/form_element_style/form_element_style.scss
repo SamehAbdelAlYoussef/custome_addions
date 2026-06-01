@@ -1,0 +1,38 @@
+input , textarea , .o_input {box-shadow: none !important;
+	&.o_field_tags {
+		.o_input {border: 0 !important;
+			&:hover , &:focus {border: 0 !important; border-top: 0 !important;}
+		}
+	}
+	&:not([type="color"]):not([type="checkbox"]):not([type="radio"]) {
+
+		@if $form_element_style =='style_1' {
+			background-color: transparent !important;background-repeat: no-repeat !important;background-size: 0 2px, 100% 1px !important;transition: background 0.5s ease-out !important;border:0 !important;border-bottom: 1px solid #ccc !important; border-radius: 0 !important; background-position: center bottom, center -webkit-calc(100% - 1px) !important;
+			&:focus , &:focus-within , &:checked {background-size: 100% 2px, 100% 1px !important; background-image: -webkit-gradient(linear, left top, left bottom, from($extra_color), to($extra_color)), -webkit-gradient(linear, left top, left bottom, from($extra_color), to($extra_color)) !important;}
+		}
+		@if $form_element_style =='style_2' {
+			border: 1.5px solid rgba(0, 0, 0, .15);transition: all .7s ease;box-shadow: none;outline: none;background: transparent;padding: 6px 10px;border-radius: 0px;position: relative;margin-bottom: 5px !important;
+			&:hover , &:focus {border-color: rgba(0, 0, 0, .35);box-shadow: 0 0 5px rgba(0, 0, 0, .2);}
+		}
+		@if $form_element_style =='style_3' {
+			border: 1.5px solid rgba(0, 0, 0, .15);transition: all .7s ease;box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.2);outline: none;background: #fff;padding: 6px 10px;border-radius: 5px;position: relative;margin-bottom: 5px !important;
+			&:hover , &:focus {border: 1.5px solid #999;background: #fff;border-color: $primaryColor;box-shadow: 0 5px 30px 0px rgba(0, 0, 0, 0.2);}
+		}
+		@if $form_element_style =='style_4' {
+			border: 0px;border-bottom: 2px solid rgba(0, 0, 0, .2);transition: all .9s ease;box-shadow: none;outline: none;background: #fafafa;padding: 6px 10px;border-radius: 0px;position: relative;margin-bottom: 5px !important;
+			&:focus , &:focus-within{ border-color: rgba(0, 0, 0, .3);box-shadow: 0 -50px 0 #ececec inset !important;}
+		}
+		@if $form_element_style =='style_5' {
+			border: 1.5px solid rgba(0, 0, 0, .15);transition: all .7s ease;box-shadow: none;outline: none;background: transparent;padding: 6px 10px;border-radius: 0px 15px 0px 15px !important;position: relative;margin-bottom: 5px !important;
+			&:hover {border: 1.5px solid $primaryColor;box-shadow: none !important;transition: all .7s ease;}
+		}
+		@if $form_element_style =='style_6' {
+			background-color: #f5f5f5;background-repeat: no-repeat;background-size: 0 1px, 100% 1px;transition: background 0s ease-out;border:0;border-bottom: 2px solid #ccc;padding: 7px 10px !important;border-radius: 0px;margin-bottom: 5px !important;background-position: left bottom, left -webkit-calc(100% - 1px);
+			&:focus , &:focus-within{ background-size: 100% 1px, 100% 1px !important;outline: 0;transition-duration: .7s;float: none;background-image: -webkit-gradient(linear, left top, left bottom, from($primaryColor), to($primaryColor)), -webkit-gradient(linear, left top, left bottom, from($primaryColor), to($primaryColor)); background-image: -webkit-linear-gradient($primaryColor, $primaryColor), -webkit-linear-gradient($primaryColor, $primaryColor);background-image: -o-linear-gradient($primaryColor, $primaryColor), -o-linear-gradient($primaryColor, $primaryColor);background-image: linear-gradient($primaryColor, $primaryColor), linear-gradient($primaryColor, $primaryColor);border: 0;border-radius: 0;box-shadow: none;}
+		}
+		@if $form_element_style =='style_7' {
+			line-height: 34px;background: #fff;border-radius: 0px;padding: 0 20px;color: #666;transition: all .7s ease;margin-bottom: 5px !important;border: 1px solid #ccc;border-top: 2px solid #ccc;
+			&:focus , &:hover {border-top: 2px solid $primaryColor ;}
+		}
+	}
+} 
