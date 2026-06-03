@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_dynamic_account_report_user,dynamic.account.report.user,model_dynamic_account_report,account.group_account_user,1,0,0,0
-access_dynamic_account_report_manager,dynamic.account.report.manager,model_dynamic_account_report,account.group_account_manager,1,1,1,1
-access_dynamic_account_report_line_user,dynamic.account.report.line.user,model_dynamic_account_report_line,account.group_account_user,1,0,0,0
-access_dynamic_account_report_line_manager,dynamic.account.report.line.manager,model_dynamic_account_report_line,account.group_account_manager,1,1,1,1
-access_simple_budget_user,simple.budget.user,model_simple_budget,base.group_user,1,1,1,1
-access_simple_budget_line_user,simple.budget.line.user,model_simple_budget_line,base.group_user,1,1,1,1
